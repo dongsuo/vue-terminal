@@ -7,7 +7,7 @@ const mockData = [
 
 export default {
   echo: {
-    description: '',
+    description: 'Echoes input',
     echo(messageList, input) {
       input = input.split(' ')
       input.splice(0, 1)

@@ -93,8 +93,8 @@
         } else if (taskList[this.inputCommand.split(' ')[0]]) {
           this.handleRun(this.inputCommand.split(' ')[0], this.inputCommand)
         } else {
-          this.messageList.push({ message: 'Unknown Command.' })
-          this.messageList.push({ message: 'type "help to get a supporting command list.' })
+          this.messageList.push({ level: 'System', message: 'Unknown Command.' })
+          this.messageList.push({ level: 'System', message: 'type "help to get a supporting command list.' })
         }
         this.inputCommand = ''
         this.autoScroll()

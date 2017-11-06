@@ -8,11 +8,11 @@ const mockData = [
 export default {
   echo: {
     description: 'Echoes input',
-    echo(messageList, input) {
+    echo(pushToList, input) {
       input = input.split(' ')
       input.splice(0, 1)
       const p = new Promise(resolve => {
-        messageList.push({ time: new Date().toLocaleTimeString().split('').splice(2).join(''), message: input.join(' ') });
+        pushToList({ time: new Date().toLocaleTimeString().split('').splice(2).join(''), message: input.join(' ') });
         resolve({ type: 'success', message: 'done!' })
       })
       return p
@@ -20,12 +20,12 @@ export default {
   },
   example: {
     description: 'Run an example to show you what this project can do.',
-    example(messageList) {
+    example(pushToList) {
       let i = 0;
       const p = new Promise(resolve => {
         const interval = setInterval(() => {
           mockData[i].time = new Date().toLocaleTimeString().split('').splice(2).join('')
-          messageList.push(mockData[i]);
+          pushToList(mockData[i]);
           i++
           if (!mockData[i]) {
             clearInterval(interval)

@@ -49,7 +49,6 @@
 <script>
 
   import commandList from './../plugins/commandList'
-  // import mockData from './../plugins/mockData'
   import taskList from './../plugins/taskList'
 
   export default {
@@ -76,7 +75,7 @@
     created() {
       this.supportingCommandList = Object.keys(commandList).concat(Object.keys(taskList))
       this.handleRun('example').then(() => {
-        this.messageList.push({ level: 'System', message: 'Type "help" to get a supporting command list.' })
+        this.pushToList({ level: 'System', message: 'Type "help" to get a supporting command list.' })
       })
     },
     methods: {
@@ -84,42 +83,46 @@
         this.$refs.inputBox.focus();
       },
       handleCommand() {
-        this.messageList.push({ message: '$ ' + this.inputCommand })
+        this.pushToList({ message: '$ ' + this.inputCommand })
         const commandArr = this.inputCommand.split(' ')
         if (commandArr[0] === 'help') {
           this.printHelp(commandArr[1])
         } else if (commandList[this.inputCommand]) {
-          commandList[this.inputCommand].messages.map(item => this.messageList.push(item))
+          commandList[this.inputCommand].messages.map(item => this.pushToList(item))
         } else if (taskList[this.inputCommand.split(' ')[0]]) {
           this.handleRun(this.inputCommand.split(' ')[0], this.inputCommand)
         } else {
-          this.messageList.push({ level: 'System', message: 'Unknown Command.' })
-          this.messageList.push({ level: 'System', message: 'type "help to get a supporting command list.' })
+          this.pushToList({ level: 'System', message: 'Unknown Command.' })
+          this.pushToList({ level: 'System', message: 'type "help to get a supporting command list.' })
         }
         this.inputCommand = ''
         this.autoScroll()
       },
       handleRun(taskName, input) {
         this.lastLineContent = '...'
-        return taskList[taskName][taskName](this.messageList, input).then(done => {
-          console.log(done)
+        return taskList[taskName][taskName](this.pushToList, input).then(done => {
           if (done.type === 'success') {
-            this.messageList.push({ level: 'Success', message: `${taskName}: ${done.message || 'done'}` })
+            this.pushToList({ level: 'Success', message: `${taskName}: ${done.message || 'done'}` })
             this.lastLineContent = '&nbsp'
           } else {
-            this.messageList.push({ level: 'Error', message: `${taskName}: ${done.message}` })
+            this.pushToList({ level: 'Error', message: `${taskName}: ${done.message}` })
             this.lastLineContent = '&nbsp'
           }
         })
       },
+      pushToList(message) {
+        this.messageList.push(message)
+        this.autoScroll()
+      },
       printHelp(input) {
         if (!input) {
-          this.supportingCommandList.map(command => this.messageList.push({ message: '- ' + command }))
-          this.messageList.push({ message: 'Enter help <command> to get help for a particular command.' })
+          this.supportingCommandList.map(command => this.pushToList({ message: '- ' + command }))
+          this.pushToList({ message: 'Enter help <command> to get help for a particular command.' })
         } else {
           const command = commandList[input] || taskList[input]
-          this.messageList.push({ message: command.description })
+          this.pushToList({ message: command.description })
         }
+        this.autoScroll()
       },
       time() {
         return new Date().toLocaleTimeString().split('').splice(2).join('')

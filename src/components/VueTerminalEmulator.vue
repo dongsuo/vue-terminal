@@ -79,7 +79,7 @@
     },
     created() {
       this.supportingCommandList = Object.keys(commandList).concat(Object.keys(taskList))
-      this.handleRun(this.defaultTask || 'example').then(() => {
+      this.handleRun(this.defaultTask).then(() => {
         this.pushToList({ level: 'System', message: 'Type "help" to get a supporting command list.' })
       })
     },

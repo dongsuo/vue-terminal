@@ -63,6 +63,11 @@
         supportingCommandList: ''
       };
     },
+    props: {
+      defaultTask: {
+        required: false
+      }
+    },
     computed: {
       lastLineClass() {
         if (this.lastLineContent === '&nbsp') {
@@ -74,7 +79,7 @@
     },
     created() {
       this.supportingCommandList = Object.keys(commandList).concat(Object.keys(taskList))
-      this.handleRun('example').then(() => {
+      this.handleRun(this.defaultTask || 'example').then(() => {
         this.pushToList({ level: 'System', message: 'Type "help" to get a supporting command list.' })
       })
     },
@@ -108,6 +113,9 @@
             this.pushToList({ level: 'Error', message: `${taskName}: ${done.message}` })
             this.lastLineContent = '&nbsp'
           }
+        }).catch(error => {
+          this.pushToList({ level: 'Error', message: `${taskName}: ${error.message}` })
+          this.lastLineContent = '&nbsp'
         })
       },
       pushToList(message) {
@@ -317,9 +325,9 @@
   position: relative;
   background:  rgb(3, 9, 36);
   border: none;
-  width: 10px;
+  width: 1px;
   opacity: 0;
-
+  cursor: default;
 }
 .input-box:focus{
   outline: none;

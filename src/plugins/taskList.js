@@ -1,4 +1,7 @@
 const mockData = [
+  { time: new Date().toLocaleTimeString(),
+    level: 'System',
+    message: 'Welcome to vTerminal, this is an example to show you what this project can do.' },
     { time: new Date().toLocaleTimeString(), level: 'Info', message: 'Terminal Initializing ............' },
     { time: new Date().toLocaleTimeString(), level: 'Warning', message: 'This is a Waning Message!' },
     { time: new Date().toLocaleTimeString(), level: 'Error', message: 'Oops, Something Went Wrong!' },
@@ -34,6 +37,26 @@ export default {
         }, 1000);
       })
       return p
+    }
+  },
+  open: {
+    description: 'Open a specified url in a new tab.',
+    open(pushToList, input) {
+      const p = new Promise((resolve, reject) => {
+        let url = input.split(' ')[1]
+        if (!url) {
+          reject({ type: 'error', message: 'a url is required!' })
+          return
+        }
+        pushToList({ type: 'success', message: 'Opening' })
+
+        if (input.split(' ')[1].indexOf('http') === -1) {
+          url = 'http://' + input.split(' ')[1]
+        }
+        window.open(url, '_blank')
+        resolve({ type: 'success', message: 'Page Opened!' })
+      })
+      return p;
     }
   }
 

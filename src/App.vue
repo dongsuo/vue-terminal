@@ -1,12 +1,17 @@
 <template>
   <div id="app">
-    <router-view/>
+    <!-- <router-view/> -->
+    <vue-terminal-emulator defaultTask="example"></vue-terminal-emulator>
   </div>
 </template>
 
 <script>
+
+import VueTerminalEmulator from './components/VueTerminalEmulator'
+
 export default {
-  name: 'app'
+  name: 'app',
+  components: { VueTerminalEmulator }
 };
 </script>
 

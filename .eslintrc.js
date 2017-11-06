@@ -189,7 +189,7 @@ module.exports = {
         'keyword-spacing': 'error',
 
         // enforce consistent linebreak style
-        'linebreak-style': 'error',
+        'linebreak-style': ['error', 'windows'],
 
         // require or disallow newlines around directives
         'lines-around-directive': 'error',

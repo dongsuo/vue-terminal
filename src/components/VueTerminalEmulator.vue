@@ -1,9 +1,9 @@
 <template>
-  <div style="width:60%;margin:0 auto;" class="terminal" @click="handleFocus">
+  <div style="width:60%;margin:0 auto;" class="terminal">
     <div style="position:relative">
 
       <div class="header">
-        <h4>Terminal</h4>
+        <h4>{{title}}</h4>
         <ul class="shell-dots">
           <li class="red"></li>
           <li class="yellow"></li>
@@ -13,21 +13,30 @@
 
       <div style="position:absolute;top:0;left:0;right:0;overflow:auto;z-index:1;margin-top:30px;max-height:650px" ref="terminalWindow">
         <div class="terminal-window" id="terminalWindow" >
-          <p>Welcome to vTerminator.</p>
+          <p>Welcome to {{title}}.</p>
           <p>
-            <span class="prompt">$</span><span class="cmd">cd {{serviceName}}</span>
+            <span class="prompt"></span><span class="cmd">cd {{title}}</span>
           </p>
 
           <p v-for="(item, index) in messageList" :key="index">
             <span>{{item.time}}</span>
-            <span v-if="item.level" :class="item.level">{{item.level}}:</span>
-            <pre class="cmd">{{item.message}}</pre>
+            <span v-if="item.label" :class="item.type">{{item.label}}</span>
+            <span class="cmd" v-if="!item.message.list">{{item.message}}</span>
+            <span class="cmd" v-else="item.message.list">
+              <span>{{item.message.text}}</span>
+              <ul>
+                <li v-for="(li,index) in item.message.list" :key="index">
+                  <span v-if="li.label" :class="li.type">{{li.label}}:</span>
+                  <pre>{{li}}</pre>
+                </li>
+              </ul>
+            </span>
           </p>
 
           <p v-if="actionResult"> <span class="cmd">{{actionResult}}</span></p>
 
-          <p class="terminal-last-line" ref="terminalLastLine">
-            <span class="prompt" v-if="lastLineContent==='&nbsp'">$ \{{serviceName}} </span>
+          <p class="terminal-last-line" ref="terminalLastLine"  @click="handleFocus">
+            <span class="prompt" v-if="lastLineContent==='&nbsp'"> \{{title}} </span>
             <span>{{inputCommand}}</span>
             <span :class="lastLineClass" v-html="lastLineContent"></span>
             <input 
@@ -55,7 +64,7 @@
     name: 'VueTerminalEmulator',
     data() {
       return {
-        serviceName: 'vTerminal',
+        title: 'vTerminal',
         messageList: [],
         actionResult: '',
         lastLineContent: '...',
@@ -98,7 +107,7 @@
           this.handleRun(this.inputCommand.split(' ')[0], this.inputCommand)
         } else {
           this.pushToList({ level: 'System', message: 'Unknown Command.' })
-          this.pushToList({ level: 'System', message: 'type "help to get a supporting command list.' })
+          this.pushToList({ level: 'System', message: 'type "help" to get a supporting command list.' })
         }
         this.inputCommand = ''
         this.autoScroll()
@@ -106,15 +115,10 @@
       handleRun(taskName, input) {
         this.lastLineContent = '...'
         return taskList[taskName][taskName](this.pushToList, input).then(done => {
-          if (done.type === 'success') {
-            this.pushToList({ level: 'Success', message: `${taskName}: ${done.message || 'done'}` })
-            this.lastLineContent = '&nbsp'
-          } else {
-            this.pushToList({ level: 'Error', message: `${taskName}: ${done.message}` })
-            this.lastLineContent = '&nbsp'
-          }
+          this.pushToList(done)
+          this.lastLineContent = '&nbsp'
         }).catch(error => {
-          this.pushToList({ level: 'Error', message: `${taskName}: ${error.message}` })
+          this.pushToList(error || { type: 'error', label: 'Error', message: 'Something went wrong!' })
           this.lastLineContent = '&nbsp'
         })
       },
@@ -124,7 +128,15 @@
       },
       printHelp(input) {
         if (!input) {
-          this.supportingCommandList.map(command => this.pushToList({ message: '- ' + command }))
+          this.pushToList({ message: 'Here is a list of supporting command.' })
+          this.supportingCommandList.map(command => {
+            if (commandList[command]) {
+              this.pushToList({ type: 'success', label: command, message: '---> ' + commandList[command].description })
+            } else {
+              this.pushToList({ type: 'success', label: command, message: '---> ' + taskList[command].description })
+            }
+            return undefined
+          })
           this.pushToList({ message: 'Enter help <command> to get help for a particular command.' })
         } else {
           const command = commandList[input] || taskList[input]
@@ -144,7 +156,7 @@
   };
 
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped lang="scss">
 .terminal {
   position: relative;
@@ -174,23 +186,23 @@
     .cmd {
       line-height: 24px;
     }
-    .Info {
+    .info {
       padding: 2px 3px;
       background: #2980b9;
     }
-    .Warning {
+    .warning {
       padding: 2px 3px;
       background: #f39c12; // https://github.com/Mayccoll/Gogh/blob/master/content/themes.md #Flat
     }
-    .Success {
+    .success {
       padding: 2px 3px;
       background: #27ae60;
     }
-    .Error {
+    .error {
       padding: 2px 3px;
       background: #c0392b;
     }
-    .System {
+    .system {
       padding: 2px 3px;
       background: #bdc3c7;
     }
@@ -249,7 +261,8 @@
   margin: 0;
 }
 
-.terminal .terminal-window .prompt {
+.terminal .terminal-window .prompt::before {
+  content: "$";
   margin-right: 10px;
 }
 

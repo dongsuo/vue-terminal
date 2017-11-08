@@ -1,11 +1,23 @@
+function generateTime() {
+  const timeNow = new Date();
+  const hours = timeNow.getHours();
+  const minutes = timeNow.getMinutes();
+  const seconds = timeNow.getSeconds();
+  let timeString = '' + hours;
+  timeString += (minutes < 10 ? ':0' : ':') + minutes;
+  timeString += (seconds < 10 ? ':0' : ':') + seconds;
+  return timeString
+}
+
 const mockData = [
-  { time: new Date().toLocaleTimeString(),
-    level: 'System',
+  { time: generateTime(),
+    type: 'system',
+    label: 'System',
     message: 'Welcome to vTerminal, this is an example to show you what this project can do.' },
-    { time: new Date().toLocaleTimeString(), level: 'Info', message: 'Terminal Initializing ............' },
-    { time: new Date().toLocaleTimeString(), level: 'Warning', message: 'This is a Waning Message!' },
-    { time: new Date().toLocaleTimeString(), level: 'Error', message: 'Oops, Something Went Wrong!' },
-    { time: new Date().toLocaleTimeString(), level: 'Success', message: 'Take it easy! Everything OK!' }
+    { time: generateTime(), type: 'info', label: 'Info', message: 'Terminal Initializing ............' },
+    { time: generateTime(), type: 'warning', label: 'warning', message: 'This is a Waning Message!' },
+    { time: generateTime(), type: 'error', label: 'Error', message: 'Oops, Something Went Wrong!' },
+    { time: generateTime(), type: 'success', label: 'Success', message: 'Take it easy! Everything OK!' }
 ]
 
 export default {
@@ -15,8 +27,8 @@ export default {
       input = input.split(' ')
       input.splice(0, 1)
       const p = new Promise(resolve => {
-        pushToList({ time: new Date().toLocaleTimeString().split('').splice(2).join(''), message: input.join(' ') });
-        resolve({ type: 'success', message: 'done!' })
+        pushToList({ time: generateTime(), label: 'Echo', type: 'success', message: input.join(' ') });
+        resolve({ type: 'success', label: '', message: '' })
       })
       return p
     }
@@ -27,12 +39,12 @@ export default {
       let i = 0;
       const p = new Promise(resolve => {
         const interval = setInterval(() => {
-          mockData[i].time = new Date().toLocaleTimeString().split('').splice(2).join('')
+          mockData[i].time = generateTime()
           pushToList(mockData[i]);
           i++
           if (!mockData[i]) {
             clearInterval(interval)
-            resolve({ type: 'success', message: 'Terminal Initialized Successfully!' })
+            resolve({ type: 'success', label: 'Success', message: 'Example Over!' })
           }
         }, 1000);
       })
@@ -45,16 +57,16 @@ export default {
       const p = new Promise((resolve, reject) => {
         let url = input.split(' ')[1]
         if (!url) {
-          reject({ type: 'error', message: 'a url is required!' })
+          reject({ type: 'error', label: 'Error', message: 'a url is required!' })
           return
         }
-        pushToList({ type: 'success', message: 'Opening' })
+        pushToList({ type: 'success', label: 'Success', message: 'Opening' })
 
         if (input.split(' ')[1].indexOf('http') === -1) {
           url = 'http://' + input.split(' ')[1]
         }
         window.open(url, '_blank')
-        resolve({ type: 'success', message: 'Page Opened!' })
+        resolve({ type: 'success', label: 'Done', message: 'Page Opened!' })
       })
       return p;
     }

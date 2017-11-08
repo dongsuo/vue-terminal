@@ -20,9 +20,14 @@ const commandList = {
     ]
   },
   readme: {
-    description: '',
+    description: 'About this project.',
     messages: [
     { message: 'This is a component that emulates a command terminal in Vue' }
-    ] }
+    ] },
+  document: {
+    description: 'Document of this project.',
+    messages: [
+    { message: 'Under Construction.' }]
+  }
 }
 export default commandList

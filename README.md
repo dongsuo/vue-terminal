@@ -2,6 +2,11 @@
 
 > A terminal emulator in Vue
 
+<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/jLorambJaixraT5uAuMPTETx/dongsuo/vue-terminal-emulator'>
+  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/jLorambJaixraT5uAuMPTETx/dongsuo/vue-terminal-emulator.svg' />
+</a>
+
+
 ## Build Setup
 
 ``` bash

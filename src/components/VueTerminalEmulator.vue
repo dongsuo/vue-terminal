@@ -74,7 +74,8 @@
     },
     props: {
       defaultTask: {
-        required: false
+        required: false,
+        default: 'defaultTask'
       }
     },
     computed: {

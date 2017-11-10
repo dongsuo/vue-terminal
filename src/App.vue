@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <vue-terminal-emulator defaultTask="example"></vue-terminal-emulator>
+    <vue-terminal-emulator></vue-terminal-emulator>
   </div>
 </template>
 

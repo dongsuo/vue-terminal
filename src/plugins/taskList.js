@@ -33,9 +33,9 @@ export default {
       return p
     }
   },
-  example: {
-    description: 'Run an example to show you what this project can do.',
-    example(pushToList) {
+  defaultTask: {
+    description: 'this is default task.',
+    defaultTask(pushToList) {
       let i = 0;
       const p = new Promise(resolve => {
         const interval = setInterval(() => {

@@ -6,6 +6,13 @@
   <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/jLorambJaixraT5uAuMPTETx/dongsuo/vue-terminal-emulator.svg' />
 </a>
 
+异步任务：
+
+![](https://user-gold-cdn.xitu.io/2017/11/10/2c49e1275ba4ad1b58528d6968680eee)
+
+help是典型的静态指令：
+
+![](https://user-gold-cdn.xitu.io/2017/11/10/631ebcdca9860e265e21baf7d83c3065)
 
 ## Build Setup
 

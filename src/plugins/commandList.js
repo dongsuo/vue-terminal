@@ -27,7 +27,12 @@ const commandList = {
   document: {
     description: 'Document of this project.',
     messages: [
-    { message: 'Under Construction.' }]
+      { message: {
+        text: 'Under Construction',
+        list: [
+        { label: 'hello', type: 'error', message: 'this is a test message' }
+        ]
+      } }]
   }
 }
 export default commandList

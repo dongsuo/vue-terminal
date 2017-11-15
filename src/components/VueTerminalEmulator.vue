@@ -22,12 +22,12 @@
             <span>{{item.time}}</span>
             <span v-if="item.label" :class="item.type">{{item.label}}</span>
             <span class="cmd" v-if="!item.message.list">{{item.message}}</span>
-            <span class="cmd" v-else="item.message.list">
+            <span class="cmd" v-else>
               <span>{{item.message.text}}</span>
               <ul>
                 <li v-for="(li,index) in item.message.list" :key="index">
                   <span v-if="li.label" :class="li.type">{{li.label}}:</span>
-                  <pre>{{li}}</pre>
+                  <pre>{{li.message}}</pre>
                 </li>
               </ul>
             </span>
@@ -39,13 +39,13 @@
             <span class="prompt" v-if="lastLineContent==='&nbsp'"> \{{title}} </span>
             <span>{{inputCommand}}</span>
             <span :class="lastLineClass" v-html="lastLineContent"></span>
-            <input 
-              v-model="inputCommand" 
-              :disabled="lastLineContent!=='&nbsp'" 
-              autofocus="true" 
-              type="text" 
-              @keyup.enter="handleCommand" 
-              ref="inputBox" 
+            <input
+              v-model="inputCommand"
+              :disabled="lastLineContent!=='&nbsp'"
+              autofocus="true"
+              type="text"
+              @keyup.enter="handleCommand"
+              ref="inputBox"
               class="input-box">
           </p>
 
@@ -237,7 +237,7 @@
 }
 
 .terminal .header {
-  position: absolute; 
+  position: absolute;
   z-index: 2;
   top: 0;
   right: 0;

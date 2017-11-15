@@ -11,7 +11,7 @@
         </ul>
       </div>
 
-      <div style="position:absolute;top:0;left:0;right:0;overflow:auto;z-index:1;margin-top:30px;max-height:650px" ref="terminalWindow">
+      <div style="position:absolute;top:0;left:0;right:0;overflow:auto;z-index:1;margin-top:30px;max-height:500px" ref="terminalWindow">
         <div class="terminal-window" id="terminalWindow" >
           <p>Welcome to {{title}}.</p>
           <p>
@@ -44,7 +44,7 @@
               :disabled="lastLineContent!=='&nbsp'"
               autofocus="true"
               type="text"
-              @keyup.enter="handleCommand"
+              @keyup="handleCommand($event)"
               ref="inputBox"
               class="input-box">
           </p>
@@ -69,7 +69,9 @@
         actionResult: '',
         lastLineContent: '...',
         inputCommand: '',
-        supportingCommandList: ''
+        supportingCommandList: '',
+        historyIndex: 0,
+        commandHistory: []
       };
     },
     props: {
@@ -98,8 +100,15 @@
       handleFocus() {
         this.$refs.inputBox.focus();
       },
-      handleCommand() {
-        this.pushToList({ message: '$ ' + this.inputCommand })
+      handleCommand(e) {
+        if (e.keyCode !== 13) {
+          this.handlekeyEvent(e)
+          return
+        }
+        this.commandHistory.push(this.inputCommand)
+        this.historyIndex = this.commandHistory.length
+        this.pushToList({ message: `$ \\ ${this.title} ${this.inputCommand} ` })
+        if (!this.inputCommand) return;
         const commandArr = this.inputCommand.split(' ')
         if (commandArr[0] === 'help') {
           this.printHelp(commandArr[1])
@@ -113,6 +122,20 @@
         }
         this.inputCommand = ''
         this.autoScroll()
+      },
+      handlekeyEvent(e) {
+        switch (e.keyCode) {
+          case 38:
+            this.historyIndex = this.historyIndex === 0 ? 0 : this.historyIndex - 1
+            this.inputCommand = this.commandHistory[this.historyIndex]
+            break;
+          case 40:
+            this.historyIndex = this.historyIndex === this.commandHistory.length ? this.commandHistory.length : this.historyIndex + 1
+            this.inputCommand = this.commandHistory[this.historyIndex]
+            break;
+          default:
+            break;
+        }
       },
       handleRun(taskName, input) {
         this.lastLineContent = '...'
@@ -166,7 +189,7 @@
   border-radius: 4px;
   color: white;
   margin-bottom: 10px;
-  max-height: 722px;
+  max-height: 580px;
 }
 
 .terminal .terminal-window {

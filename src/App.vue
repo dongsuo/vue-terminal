@@ -1,16 +1,24 @@
 <template>
   <div id="app">
-    <vue-terminal-emulator></vue-terminal-emulator>
+    <vue-terminal-emulator :commandList="commandList" :taskList="taskList"></vue-terminal-emulator>
   </div>
 </template>
 
 <script>
 
 import VueTerminalEmulator from './components/VueTerminalEmulator'
+import commandList from './plugins/commandList'
+import taskList from './plugins/taskList'
 
 export default {
   name: 'app',
-  components: { VueTerminalEmulator }
+  components: { VueTerminalEmulator },
+  data() {
+    return {
+      commandList,
+      taskList
+    }
+  }
 };
 </script>
 

@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 // const USER_ID = parseInt(Math.random() * 1000)
 function generateTime() {
   const timeNow = new Date();
@@ -72,25 +72,5 @@ export default {
       })
       return p;
     }
-  },
-  chat: {
-    description: 'Chat with a robot',
-    chat(pushToList, input) {
-      input = input.split(' ')[1]
-      axios.post('url', {
-
-      }).then(response => {
-        console.log(response)
-      })
-      const p = new Promise((resolve, reject) => {
-        const url = input.split(' ')[1]
-        if (!url) {
-          reject({ type: 'error', label: 'Error', message: 'a url is required!' })
-          return
-        }
-      })
-      return p;
-    }
   }
-
 }

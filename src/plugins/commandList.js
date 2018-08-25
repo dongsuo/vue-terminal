@@ -27,12 +27,7 @@ const commandList = {
   document: {
     description: 'Document of this project.',
     messages: [
-      { message: {
-        text: 'Under Construction',
-        list: [
-        { label: 'hello', type: 'error', message: 'this is a test message' }
-        ]
-      } }]
+      { message: 'Please visit https://blog.xiaofeixu.cn/2018/01/16/' }]
   }
 }
 export default commandList

@@ -35,4 +35,3 @@ const commandList = {
       } }]
   }
 }
-export default commandList

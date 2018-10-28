@@ -1,5 +1,5 @@
 <template>
-  <div style="width:60%;margin:0 auto;" class="terminal">
+  <div class="terminal"  @click="handleFocus">
     <div style="position:relative">
 
       <div class="header">
@@ -35,7 +35,7 @@
 
           <p v-if="actionResult"> <span class="cmd">{{actionResult}}</span></p>
 
-          <p class="terminal-last-line" ref="terminalLastLine"  @click="handleFocus">
+          <p class="terminal-last-line" ref="terminalLastLine">
             <span class="prompt" v-if="lastLineContent==='&nbsp'"> \{{title}} </span>
             <span>{{inputCommand}}</span>
             <span :class="lastLineClass" v-html="lastLineContent"></span>
@@ -53,12 +53,8 @@
       </div>
     </div>
   </div>
-  </div>
 </template>
 <script>
-
-  import commandList from './../plugins/commandList'
-  import taskList from './../plugins/taskList'
 
   export default {
     name: 'VueTerminalEmulator',
@@ -78,6 +74,14 @@
       defaultTask: {
         required: false,
         default: 'defaultTask'
+      },
+      commandList: {
+        required: false,
+        default: () => { return {}}
+      },
+      taskList: {
+        required: false,
+        default: () => { return {}}
       }
     },
     computed: {
@@ -90,7 +94,7 @@
       }
     },
     created() {
-      this.supportingCommandList = Object.keys(commandList).concat(Object.keys(taskList))
+      this.supportingCommandList = Object.keys(this.commandList).concat(Object.keys(this.taskList))
       this.handleRun(this.defaultTask).then(() => {
         this.pushToList({ level: 'System', message: 'Type "help" to get a supporting command list.' })
         this.handleFocus()
@@ -112,9 +116,9 @@
         const commandArr = this.inputCommand.split(' ')
         if (commandArr[0] === 'help') {
           this.printHelp(commandArr[1])
-        } else if (commandList[this.inputCommand]) {
-          commandList[this.inputCommand].messages.map(item => this.pushToList(item))
-        } else if (taskList[this.inputCommand.split(' ')[0]]) {
+        } else if (this.commandList[this.inputCommand]) {
+          this.commandList[this.inputCommand].messages.map(item => this.pushToList(item))
+        } else if (this.taskList[this.inputCommand.split(' ')[0]]) {
           this.handleRun(this.inputCommand.split(' ')[0], this.inputCommand)
         } else {
           this.pushToList({ level: 'System', message: 'Unknown Command.' })
@@ -139,7 +143,7 @@
       },
       handleRun(taskName, input) {
         this.lastLineContent = '...'
-        return taskList[taskName][taskName](this.pushToList, input).then(done => {
+        return this.taskList[taskName][taskName](this.pushToList, input).then(done => {
           this.pushToList(done)
           this.lastLineContent = '&nbsp'
         }).catch(error => {
@@ -155,16 +159,16 @@
         if (!input) {
           this.pushToList({ message: 'Here is a list of supporting command.' })
           this.supportingCommandList.map(command => {
-            if (commandList[command]) {
-              this.pushToList({ type: 'success', label: command, message: '---> ' + commandList[command].description })
+            if (this.commandList[command]) {
+              this.pushToList({ type: 'success', label: command, message: '---> ' + this.commandList[command].description })
             } else {
-              this.pushToList({ type: 'success', label: command, message: '---> ' + taskList[command].description })
+              this.pushToList({ type: 'success', label: command, message: '---> ' + this.taskList[command].description })
             }
             return undefined
           })
           this.pushToList({ message: 'Enter help <command> to get help for a particular command.' })
         } else {
-          const command = commandList[input] || taskList[input]
+          const command = this.commandList[input] || this.taskList[input]
           this.pushToList({ message: command.description })
         }
         this.autoScroll()

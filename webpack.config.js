@@ -6,37 +6,14 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: 'vue-terminal-emulator.min.js',
-    library: 'VueTerminalEmulator',
+    filename: 'vue-terminal.min.js',
+    library: 'VueTerminal',
     libraryTarget: 'umd',
     umdNamedDefine: true
 
   },
   module: {
     rules: [
-      {
-        test: /\.css$/,
-        use: [
-          'vue-style-loader',
-          'css-loader'
-        ]
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          'vue-style-loader',
-          'css-loader',
-          'sass-loader'
-        ]
-      },
-      {
-        test: /\.sass$/,
-        use: [
-          'vue-style-loader',
-          'css-loader',
-          'sass-loader?indentedSyntax'
-        ]
-      },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -78,6 +55,14 @@ module.exports = {
       vue$: 'vue/dist/vue.esm.js'
     },
     extensions: ['*', '.js', '.vue', '.json']
+  },
+  externals: {
+    vue: {
+      root: 'Vue',
+      commonjs: 'vue',
+      commonjs2: 'vue',
+      amd: 'vue'
+    }
   },
   devServer: {
     historyApiFallback: true,

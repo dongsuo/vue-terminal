@@ -48,7 +48,6 @@
               ref="inputBox"
               class="input-box">
           </p>
-
         </div>
       </div>
     </div>
@@ -57,7 +56,7 @@
 <script>
 
   export default {
-    name: 'VueTerminalEmulator',
+    name: 'VueTerminal',
     data() {
       return {
         title: 'vTerminal',

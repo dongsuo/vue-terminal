@@ -42,3 +42,17 @@ The content of taskList or commandList is:
     }
 ```
 You can check /docs/plugins/commandList.js and  /docs/plugins/taskList.js to view the detail of task and command.
+
+### Configuration options
+
+The following options can be passed as props to the `VueTerminal` component to customize its behavior:
+
+**title** _(string)_: Sets the title that appears at the top of the terminal window, in the greeting, and in front of the prompt. Defaults to `vTerminal`.
+
+**showHeader** _(boolean)_: Indicates whether or not to render the window chrome on top of the terminal. Defaults to `true`.
+
+**greeting** _(string)_: Sets the greeting that will be shown to the user in the first line of the terminal. Pass `false` to not render a greeting. Defaults to `Welcome to vTerminal.`.
+
+**showInitialCd** _(boolean)_: Initializes the terminal by showing an initial `cd vTerminal` command. Defaults to `true`.
+
+**prompt** _(string)_: The text to show before the prompt. Defaults to `\vTerminal`.

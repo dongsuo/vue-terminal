@@ -2,7 +2,7 @@
   <div class="terminal"  @click="handleFocus">
     <div style="position:relative">
 
-      <div class="header">
+      <div class="header" v-if="showHeader">
         <h4>{{title}}</h4>
         <ul class="shell-dots">
           <li class="red"></li>
@@ -13,8 +13,11 @@
 
       <div style="position:absolute;top:0;left:0;right:0;overflow:auto;z-index:1;margin-top:30px;max-height:500px" ref="terminalWindow">
         <div class="terminal-window" id="terminalWindow" >
-          <p>Welcome to {{title}}.</p>
-          <p>
+          <span v-if="greeting !== false">
+            <p v-if="greeting">{{greeting}}</p>
+            <p v-else>Welcome to {{title}}.</p>
+          </span>
+          <p v-if="showInitialCd">
             <span class="prompt"></span><span class="cmd">cd {{title}}</span>
           </p>
 
@@ -36,7 +39,10 @@
           <p v-if="actionResult"> <span class="cmd">{{actionResult}}</span></p>
 
           <p class="terminal-last-line" ref="terminalLastLine">
-            <span class="prompt" v-if="lastLineContent==='&nbsp'"> \{{title}} </span>
+            <span v-if="lastLineContent==='&nbsp'">
+              <span v-if="typeof prompt !== 'undefined'">{{prompt}}</span>
+              <span class="prompt" v-else>\{{title}}</span>
+            </span>
             <span>{{inputCommand}}</span>
             <span :class="lastLineClass" v-html="lastLineContent"></span>
             <input
@@ -59,7 +65,6 @@
     name: 'VueTerminal',
     data() {
       return {
-        title: 'vTerminal',
         messageList: [],
         actionResult: '',
         lastLineContent: '...',
@@ -81,6 +86,26 @@
       taskList: {
         required: false,
         default: () => { return {}}
+      },
+      title: {
+        required: false,
+        default: 'vTerminal'
+      },
+      showHeader: {
+        required: false,
+        default: true
+      },
+      greeting: {
+        required: false,
+        default: undefined
+      },
+      showInitialCd: {
+        required: false,
+        default: true
+      },
+      prompt: {
+        required: false,
+        default: undefined
       }
     },
     computed: {
@@ -110,7 +135,12 @@
         }
         this.commandHistory.push(this.inputCommand)
         this.historyIndex = this.commandHistory.length
-        this.pushToList({ message: `$ \\ ${this.title} ${this.inputCommand} ` })
+
+        if (typeof this.prompt !== 'undefined') {
+          this.pushToList({ message: `${this.prompt} ${this.inputCommand} ` })
+        } else {
+          this.pushToList({ message: `$ \\${this.title} ${this.inputCommand} ` })
+        }
         if (!this.inputCommand) return;
         const commandArr = this.inputCommand.split(' ')
         if (commandArr[0] === 'help') {

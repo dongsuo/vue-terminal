@@ -110,6 +110,10 @@
       showHelpMessage: {
         required: false,
         default: true
+      },
+      unknownCommandMessage: {
+        required: false,
+        default: undefined
       }
     },
     computed: {
@@ -156,8 +160,12 @@
         } else if (this.taskList[this.inputCommand.split(' ')[0]]) {
           this.handleRun(this.inputCommand.split(' ')[0], this.inputCommand)
         } else {
-          this.pushToList({ level: 'System', message: 'Unknown Command.' })
-          this.pushToList({ level: 'System', message: 'type "help" to get a supporting command list.' })
+          if (this.unknownCommandMessage) {
+            this.pushToList(this.unknownCommandMessage)
+          } else {
+            this.pushToList({ level: 'System', message: 'Unknown Command.' })
+            this.pushToList({ level: 'System', message: 'type "help" to get a supporting command list.' })
+          }
         }
         this.inputCommand = ''
         this.autoScroll()

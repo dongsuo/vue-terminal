@@ -58,3 +58,17 @@ The following options can be passed as props to the `VueTerminal` component to c
 **prompt** _(string)_: The text to show before the prompt. Defaults to `\vTerminal`.
 
 **showHelpMessage** _(boolean)_: Indicates whether a help message should be shown.  Defaults to `true`.
+
+**unknownCommandMessage** _(object)_: Allows the message that is printed when an unknown command is run to be customized. This object should have a `message` property and can optionally include some additional properties that change how this message is displayed:
+
+```js
+{ time: '10:53', type: 'error', label: 'Error', message: 'That command is not recognized!' },
+```
+
+If not provided, the default message will be displayed:
+
+```
+Unknown Command.
+
+type "help" to get a supporting command list.
+```

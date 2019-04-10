@@ -106,6 +106,10 @@
       prompt: {
         required: false,
         default: undefined
+      },
+      showHelpMessage: {
+        required: false,
+        default: true
       }
     },
     computed: {
@@ -120,7 +124,9 @@
     created() {
       this.supportingCommandList = Object.keys(this.commandList).concat(Object.keys(this.taskList))
       this.handleRun(this.defaultTask).then(() => {
-        this.pushToList({ level: 'System', message: 'Type "help" to get a supporting command list.' })
+        if (this.showHelpMessage) {
+          this.pushToList({ level: 'System', message: 'Type "help" to get a supporting command list.' })
+        }
         this.handleFocus()
       })
     },

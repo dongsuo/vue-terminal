@@ -56,3 +56,5 @@ The following options can be passed as props to the `VueTerminal` component to c
 **showInitialCd** _(boolean)_: Initializes the terminal by showing an initial `cd vTerminal` command. Defaults to `true`.
 
 **prompt** _(string)_: The text to show before the prompt. Defaults to `\vTerminal`.
+
+**showHelpMessage** _(boolean)_: Indicates whether a help message should be shown.  Defaults to `true`.

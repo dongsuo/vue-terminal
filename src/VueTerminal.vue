@@ -81,11 +81,11 @@
       },
       commandList: {
         required: false,
-        default: () => { return {}}
+        default: () => ({})
       },
       taskList: {
         required: false,
-        default: () => { return {}}
+        default: () => ({})
       },
       title: {
         required: false,
@@ -185,6 +185,7 @@
         }
       },
       handleRun(taskName, input) {
+        if (!this.taskList[taskName] || !this.taskList[taskName][taskName]) return Promise.resolve()
         this.lastLineContent = '...'
         return this.taskList[taskName][taskName](this.pushToList, input).then(done => {
           this.pushToList(done)
@@ -362,6 +363,7 @@
   display: inline-block;
   width: 0;
   overflow: hidden;
+  overflow-wrap: normal;
   animation: load 1.2s step-end infinite;
   -webkit-animation: load 1.2s step-end infinite;
 }

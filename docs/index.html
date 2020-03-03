@@ -16,15 +16,12 @@
 	</div>
 </body>
 <script>
-	var main = {
-		data() {
-			return {
-				taskList,
-				commandList
-			}
-		}
+	const main = {
+	  data() {
+	    return { taskList, commandList }
+	  }
 	}
-	var APP = Vue.extend(main)
+	const APP = Vue.extend(main)
 	new APP().$mount('#app')
 </script>
 </html>

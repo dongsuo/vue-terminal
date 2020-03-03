@@ -1,6 +1,6 @@
 # VUE-TERMINAL
 Vue-terminal is a dependency-free, lightweight terminal emulator in Vue.js. Vue-terminal provide flexible api for developer to define task or command that can be executed by users.
-## [Try the demo](https://xiaofeixu.cn/vue-terminal)
+## [Try the demo](https://islasher.com/vue-terminal)
 
 ### How to use?
 ```bash

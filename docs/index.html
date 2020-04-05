@@ -4,14 +4,22 @@
 	<meta charset="UTF-8">
 	<title>VueTerminalEmulator</title>
 	<script src='https://unpkg.com/vue@2.2.6'></script>
-	<script src="./vue-terminal.min.js"></script>
+	<script src="../dist/vue-terminal.min.js"></script>
 	<script src="./plugins/commandList.js"></script>
 	<script src="./plugins/taskList.js"></script>
 </head>
 <body>
 	<div id="app">
 		<template>
-			<vue-terminal :task-list="taskList" :command-list="commandList" style="width:50%;margin:0 auto"></vue-terminal>
+			<vue-terminal 
+				title="vTerminal"
+				:task-list="taskList" 
+				:command-list="commandList" 
+				default-task="defaultTask"
+				prompt="->" 
+				greeting="Welcome, Muggles！"
+				style="width:50%;margin:0 auto">
+			</vue-terminal>
 		</template>
 	</div>
 </body>

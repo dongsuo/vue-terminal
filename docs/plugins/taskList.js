@@ -11,14 +11,11 @@ function generateTime() {
 }
 
 const mockData = [
-  { time: generateTime(),
-    type: 'system',
-    label: 'System',
-    message: 'Welcome to vTerminal, this is an example to show you what this project can do.' },
-    { time: generateTime(), type: 'info', label: 'Info', message: 'Terminal Initializing ............' },
-    { time: generateTime(), type: 'warning', label: 'warning', message: 'This is a Waning Message!' },
-    { time: generateTime(), type: 'error', label: 'Error', message: 'Oops, Something Went Wrong!' },
-    { time: generateTime(), type: 'success', label: 'Success', message: 'Take it easy! Everything OK!' }
+  { time: generateTime(), type: 'system', label: 'System', message: 'Welcome to vTerminal, this is an example to show you what this project can do.' },
+  { time: generateTime(), type: 'info', label: 'Info', message: 'Terminal Initializing ............' },
+  { time: generateTime(), type: 'warning', label: 'warning', message: 'This is a warning message!' },
+  { time: generateTime(), type: 'error', label: 'Error', message: 'Oops, something went wrong!' },
+  { time: generateTime(), type: 'success', label: 'Success', message: 'Take it easy! everything OK!' }
 ]
 
 const taskList = {
@@ -35,7 +32,7 @@ const taskList = {
     }
   },
   defaultTask: {
-    description: 'this is default task.',
+    description: 'This is a default task aimed to show you the power of this project.',
     defaultTask(pushToList) {
       let i = 0;
       const p = new Promise(resolve => {
@@ -47,7 +44,7 @@ const taskList = {
             clearInterval(interval)
             resolve({ type: 'success', label: 'Success', message: 'Example Over!' })
           }
-        }, 1000);
+        }, 500);
       })
       return p
     }

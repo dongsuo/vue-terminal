@@ -1,60 +1,54 @@
 <template>
-  <div class="terminal"  @click="handleFocus">
-    <div style="position:relative">
+  <div class="vue-terminal"  @click="handleFocus">
+    <div class="terminal-header" v-if="showHeader">
+      <h4>{{title}}</h4>
+      <ul class="shell-dots">
+        <li class="shell-dots-red"></li>
+        <li class="shell-dots-yellow"></li>
+        <li class="shell-dots-green"></li>
+      </ul>
+    </div>
 
-      <div class="header" v-if="showHeader">
-        <h4>{{title}}</h4>
-        <ul class="shell-dots">
-          <li class="red"></li>
-          <li class="yellow"></li>
-          <li class="green"></li>
-        </ul>
-      </div>
+    <div >
+      <div class="terminal-window" ref="terminalWindow">
+        <p v-if="greeting">{{greeting}}</p>
+        <p v-if="defaultTaskCommandd">
+          <span class="prompt"></span><span class="cmd">{{defaultTaskCommandd}}</span>
+        </p>
 
-      <div style="position:absolute;top:0;left:0;right:0;overflow:auto;z-index:1;margin-top:30px;max-height:500px" ref="terminalWindow">
-        <div class="terminal-window" id="terminalWindow" >
-          <span v-if="greeting !== false">
-            <p v-if="greeting">{{greeting}}</p>
-            <p v-else>Welcome to {{title}}.</p>
+        <p v-for="(item, index) in messageList" :key="index">
+          <span>{{item.time}}</span>
+          <span v-if="item.label" :class="item.type">{{item.label}}</span>
+          <pre class="cmd" v-if="!item.message.list">{{item.message}}</pre>
+          <span class="cmd" v-else>
+            <pre>{{item.message.text}}</pre>
+            <ul>
+              <li v-for="(li,index) in item.message.list" :key="index">
+                <span v-if="li.label" :class="li.type">{{li.label}}:</span>
+                <pre>{{li.message}}</pre>
+              </li>
+            </ul>
           </span>
-          <p v-if="showInitialCd">
-            <span class="prompt"></span><span class="cmd">cd {{title}}</span>
-          </p>
+        </p>
 
-          <p v-for="(item, index) in messageList" :key="index">
-            <span>{{item.time}}</span>
-            <span v-if="item.label" :class="item.type">{{item.label}}</span>
-            <span class="cmd" v-if="!item.message.list">{{item.message}}</span>
-            <span class="cmd" v-else>
-              <span>{{item.message.text}}</span>
-              <ul>
-                <li v-for="(li,index) in item.message.list" :key="index">
-                  <span v-if="li.label" :class="li.type">{{li.label}}:</span>
-                  <pre>{{li.message}}</pre>
-                </li>
-              </ul>
-            </span>
-          </p>
+        <p v-if="actionResult"> <span class="cmd">{{actionResult}}</span></p>
 
-          <p v-if="actionResult"> <span class="cmd">{{actionResult}}</span></p>
-
-          <p class="terminal-last-line" ref="terminalLastLine">
-            <span v-if="lastLineContent==='&nbsp'">
-              <span v-if="typeof prompt !== 'undefined'">{{prompt}}</span>
-              <span class="prompt" v-else>\{{title}}</span>
-            </span>
-            <span>{{inputCommand}}</span>
-            <span :class="lastLineClass" v-html="lastLineContent"></span>
-            <input
-              v-model="inputCommand"
-              :disabled="lastLineContent!=='&nbsp'"
-              autofocus="true"
-              type="text"
-              @keyup="handleCommand($event)"
-              ref="inputBox"
-              class="input-box">
-          </p>
-        </div>
+        <p class="terminal-last-line" ref="terminalLastLine">
+          <span v-if="lastLineContent==='&nbsp'">
+            <span v-if="typeof prompt !== 'undefined'" class="prompt">{{prompt}}</span>
+            <span class="prompt" v-else>\{{title}}</span>
+          </span>
+          <span>{{inputCommand}}</span>
+          <span :class="lastLineClass" v-html="lastLineContent"></span>
+          <input
+            v-model="inputCommand"
+            :disabled="lastLineContent!=='&nbsp'"
+            autofocus="true"
+            type="text"
+            @keyup="handleCommand($event)"
+            ref="inputBox"
+            class="input-box">
+        </p>
       </div>
     </div>
   </div>
@@ -75,10 +69,6 @@
       };
     },
     props: {
-      defaultTask: {
-        required: false,
-        default: 'defaultTask'
-      },
       commandList: {
         required: false,
         default: () => ({})
@@ -89,19 +79,28 @@
       },
       title: {
         required: false,
+        type: String,
         default: 'vTerminal'
       },
       showHeader: {
         required: false,
+        type: Boolean,
         default: true
       },
       greeting: {
         required: false,
+        type: String,
         default: undefined
       },
-      showInitialCd: {
+      defaultTaskCommandd: {
         required: false,
-        default: true
+        type: String,
+        default: 'init vTerminal'
+      },
+      defaultTask: {
+        required: false,
+        type: String,
+        default: undefined
       },
       prompt: {
         required: false,
@@ -127,12 +126,16 @@
     },
     created() {
       this.supportingCommandList = Object.keys(this.commandList).concat(Object.keys(this.taskList))
-      this.handleRun(this.defaultTask).then(() => {
-        if (this.showHelpMessage) {
-          this.pushToList({ level: 'System', message: 'Type "help" to get a supporting command list.' })
-        }
-        this.handleFocus()
-      })
+    },
+    async mounted() {
+      if (this.defaultTask) {
+        await this.handleRun(this.defaultTask)
+      }
+      if (this.showHelpMessage) {
+        this.pushToList({ level: 'System', message: 'Type "help" to get a supporting command list.' })
+      }
+      this.lastLineContent = '&nbsp'
+      this.handleFocus()
     },
     methods: {
       handleFocus() {
@@ -231,7 +234,7 @@
 </script>
 
 <style scoped lang="scss">
-.terminal {
+.vue-terminal {
   position: relative;
   width: 100%;
   border-radius: 4px;
@@ -240,7 +243,15 @@
   max-height: 580px;
 }
 
-.terminal .terminal-window {
+.vue-terminal .terminal-window {
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  overflow:auto;
+  z-index:1;
+  margin-top:30px;
+  max-height:500px;
   padding-top: 50px;
   background-color: rgb(3, 9, 36);
   min-height: 140px;
@@ -286,28 +297,27 @@
   }
 }
 
-.terminal .header ul.shell-dots li {
+.terminal-header ul.shell-dots li {
   display: inline-block;
   width: 12px;
   height: 12px;
   border-radius: 6px;
-  background-color: rgb(3, 9, 36);
   margin-left: 6px
 }
 
-.terminal .header ul.shell-dots li.red {
+.terminal-header ul .shell-dots-red {
   background-color: rgb(200, 48, 48);
 }
 
-.terminal .header ul.shell-dots li.yellow {
+.terminal-header ul .shell-dots-yellow {
   background-color: rgb(247, 219, 96);
 }
 
-.terminal .header ul.shell-dots li.green {
+.terminal-header ul .shell-dots-green {
   background-color: rgb(46, 201, 113);
 }
 
-.terminal .header {
+.terminal-header {
   position: absolute;
   z-index: 2;
   top: 0;
@@ -320,13 +330,13 @@
   border-top-right-radius: 4px
 }
 
-.terminal .header h4 {
+.terminal-header h4 {
   font-size: 14px;
   margin: 5px;
   letter-spacing: 1px;
 }
 
-.terminal .header ul.shell-dots {
+.terminal-header ul.shell-dots {
   position: absolute;
   top: 5px;
   left: 8px;
@@ -334,12 +344,12 @@
   margin: 0;
 }
 
-.terminal .terminal-window .prompt::before {
+.vue-terminal .terminal-window .prompt::before {
   content: "$";
   margin-right: 10px;
 }
 
-.terminal .terminal-window .cursor {
+.vue-terminal .terminal-window .cursor {
   margin: 0;
   background-color: white;
   animation: blink 1s step-end infinite;
@@ -359,7 +369,7 @@
   }
 }
 
-.terminal .terminal-window .loading {
+.vue-terminal .terminal-window .loading {
   display: inline-block;
   width: 0;
   overflow: hidden;

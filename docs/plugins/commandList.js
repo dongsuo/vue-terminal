@@ -27,12 +27,14 @@ const commandList = {
   document: {
     description: 'Document of this project.',
     messages: [
-      { message: {
+      { 
+        message: {
         text: 'Under Construction',
         list: [
-        { label: 'hello', type: 'error', message: 'this is a test message' }
-        ]
-      } }]
+          { label: 'hello', type: 'error', message: 'this is a test message' }
+          ]
+        } 
+      }]
   },
   'git help': {
     description: 'git help',

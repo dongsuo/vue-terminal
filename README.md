@@ -36,7 +36,7 @@ npm install vue-terminal
 </script>
 
 ```
-### About commandList and taskList 
+### About commandList and taskList
 
 The content of taskList or commandList is defined as json object, the key of the json is command name or task name, here is the structure of command or task:
 
@@ -53,7 +53,7 @@ The content of taskList or commandList is defined as json object, the key of the
 
 `description` is something to describe your task, which will be used by the `help` command.
 
-`messagesOrTask` is the main part defined to response the command, in `commandList`, the key is `messages`, and in `taskList` the key should be same with task name, here is the detail: 
+`messagesOrTask` is the main part defined to response the command, in `commandList`, the key is `messages`, and in `taskList` the key should be same with task name, here is the detail:
 - messages _(array)_
 
   messages is an array of `Message`, you can only show message string in terminal instance as a response to a command.
@@ -73,7 +73,7 @@ The content of taskList or commandList is defined as json object, the key of the
     message: '' // message is a string, the main text showed in terminal.
   }
   ```
-  here is an example: 
+  here is an example:
   ```javascript
     { time: generateTime(), type: 'system', label: 'System', message: 'Welcome to vTerminal, this is an example to show you what this project can do.' },
   ```
@@ -110,6 +110,6 @@ The following options can be passed as props to the `VueTerminal` component to c
 
   type "help" to get a supporting command list.
   ```
-
+- **autoFocus** _(boolean)_: Auto focus cursor when initializing the terminal. Defaults to `true`.
 
 If you want more feature or have problem while using this package, feel free to pull a request or open an issue.

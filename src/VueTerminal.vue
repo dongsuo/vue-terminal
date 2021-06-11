@@ -43,7 +43,7 @@
           <input
             v-model="inputCommand"
             :disabled="lastLineContent!=='&nbsp'"
-            autofocus="true"
+            :autofocus="autoFocus"
             type="text"
             @keyup="handleCommand($event)"
             ref="inputBox"
@@ -113,6 +113,10 @@
       unknownCommandMessage: {
         required: false,
         default: undefined
+      },
+      autoFocus:{
+        required: false,
+        default: true
       }
     },
     computed: {
@@ -135,7 +139,9 @@
         this.pushToList({ level: 'System', message: 'Type "help" to get a supporting command list.' })
       }
       this.lastLineContent = '&nbsp'
-      this.handleFocus()
+      if (this.autoFocus){
+        this.handleFocus()
+      }
     },
     methods: {
       handleFocus() {

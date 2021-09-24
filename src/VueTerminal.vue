@@ -152,6 +152,7 @@
           this.handlekeyEvent(e)
           return
         }
+        this.$emit('input', this.inputCommand)
         this.commandHistory.push(this.inputCommand)
         this.historyIndex = this.commandHistory.length
 

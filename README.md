@@ -84,7 +84,7 @@ You can check `/docs/plugins/commandList.js` and  `/docs/plugins/taskList.js` to
 
 The following options can be passed as props to the `VueTerminal` component to customize its behavior:
 
--**title** _(string)_: Sets the title that appears at the top of the terminal window and in front of the prompt. Defaults to `vTerminal`.
+- **title** _(string)_: Sets the title that appears at the top of the terminal window and in front of the prompt. Defaults to `vTerminal`.
 
 - **showHeader** _(boolean)_: Indicates whether or not to render the window on top of the terminal. Defaults to `true`.
 

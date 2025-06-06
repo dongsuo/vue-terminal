@@ -1,3 +1,4 @@
+[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
 # VUE-TERMINAL
 Vue-terminal is a dependency-free, lightweight terminal emulator in Vue.js. Vue-terminal provide flexible api for developer to define task or command that can be executed by users.
 ## [Try the demo](https://islasher.com/vue-terminal)
